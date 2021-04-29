@@ -9,6 +9,17 @@ from app import models
 from django.core.exceptions import ValidationError
 import re
 
+class MyForm(forms.Form):
+    def getError(self):
+        errors = self.errors.get_json_data()
+        error = {}
+        for key, message_dicts in errors.items():
+            messages = []
+            for message in message_dicts:
+                messages.append(message['message'])
+            error[key] = messages
+
+            return error
 
 class UserForm(forms.Form):
     username=forms.CharField(max_length=32,
@@ -65,3 +76,31 @@ class UserForm(forms.Form):
     #             raise ValidationError('两次输入密码不一样！')
     #     else:
     #         return self.cleaned_data
+
+
+class CategoryForm(MyForm):
+    title=forms.CharField(max_length=16,error_messages={'max_length':'不能大于16个字符'})
+
+    def clean_title(self):
+        title = self.cleaned_data.get('title')
+
+        obj=models.Category.objects.filter(title=title).first()
+
+        if not obj:
+            return title
+        else:
+            raise ValidationError('已存在相同名字')
+
+
+class TagForm(MyForm):
+    title=forms.CharField(max_length=16,error_messages={'max_length':'不能大于16个字符'})
+
+    def clean_title(self):
+        title = self.cleaned_data.get('title')
+
+        obj=models.Tag.objects.filter(title=title).first()
+
+        if not obj:
+            return title
+        else:
+            raise ValidationError('已存在相同名字')

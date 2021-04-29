@@ -24,11 +24,27 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('test/',views.test),
     path('',views.index,name='home'),
+    path('blog/',views.blog),
+    path('about/',views.about),
+    path('contact/',views.contact),
+    path('single/',views.single),
     path('login/',views.login),
     path('logout/',views.logout,name='logout'),
     path('user/',views.user),
     path('manage/',views.manage),
-    path('manage/single/',views.single),
+    path('manage/userinfo/',views.userinfo),
+    path('manage/article/',views.article),
+
+    path('manage/tag/',views.tag),
+    path('manage/add_tag/', views.add_tag),
+    path('manage/edit_tag/<id>/', views.edit_tag),
+    path('manage/del_tag/<id>/', views.del_tag),
+
+    path('manage/category/',views.category),
+    path('manage/add_category/',views.add_category),
+    path('manage/edit_category/<id>/',views.edit_category),
+    path('manage/del_category/<id>/',views.del_category),
+
     re_path(r"media/(?P<path>.*)$",serve,{"document_root":settings.MEDIA_ROOT}),
 
 ]

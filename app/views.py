@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from app import forms,models
 from blog import settings
+from django.views.decorators.csrf import csrf_exempt
 
 
 # Create your views here.
@@ -19,21 +20,25 @@ def index(request):
 
 def login(request):
 
-    if request.method=='POST':
-        username = request.POST.get('user')
-        password = request.POST.get('pwd')
+    if not request.user.is_authenticated:
+        if request.method=='POST':
+            username = request.POST.get('user')
+            password = request.POST.get('pwd')
 
-        user=auth.authenticate(username=username,password=password)
-        if user:
-            auth.login(request,user)
-            return redirect('/manage/')
+            user=auth.authenticate(username=username,password=password)
+            if user:
+                auth.login(request,user)
+                return redirect('/manage/')
+
+        return render(request, 'manage/login.html', locals())
+
+    return redirect('/manage/')
 
 
-    return render(request, 'manage/login.html', locals())
 
 def logout(request):
     auth.logout(request)
-    return render(request, 'manage/login.html', locals())
+    return redirect('/login/')
 
 
 
@@ -43,10 +48,10 @@ def manage(request):
 
 
 @login_required()
-def single(request):
-    return render(request,'manage/single.html',locals())
+def userinfo(request):
+    return render(request,'manage/userinfo.html',locals())
 
-
+@login_required()
 def user(request):
     ret={}
 
@@ -90,6 +95,107 @@ def user(request):
 
     return JsonResponse(ret)
 
+
+@login_required()
+def article(request):
+    return render(request,'manage/article.html',locals())
+
+
+#############################【标签】#####################################
+@login_required()
+def tag(request):
+    list = models.Tag.objects.all()
+    return render(request,'manage/tag.html',locals())
+
+@login_required()
+@csrf_exempt
+def add_tag(request):
+    ret={}
+    form = forms.TagForm(request.POST)
+    if form.is_valid():
+        models.Tag.objects.create(**form.cleaned_data)
+        ret['status']=0
+    else:
+
+        error=form.getError()
+
+        ret['status'] = 1
+        ret['error'] = error
+    return JsonResponse(ret)
+
+@login_required()
+@csrf_exempt
+def edit_tag(request,id):
+    ret={}
+    form = forms.TagForm(request.POST)
+    if form.is_valid():
+        models.Tag.objects.filter(nid=id).update(**form.cleaned_data)
+        ret['status'] = 0
+    else:
+
+        error=form.getError()
+        ret['status'] = 1
+        ret['error'] = error
+
+    return JsonResponse(ret)
+
+@login_required()
+@csrf_exempt
+def del_tag(request,id):
+    ret={}
+    models.Tag.objects.filter(pk=id).delete()
+    ret['status']=0
+    return JsonResponse(ret)
+
+
+
+##############################【分类】############################################
+@login_required()
+def category(request):
+    list = models.Category.objects.all()
+    return render(request,'manage/category.html',locals())
+
+@login_required()
+@csrf_exempt
+def add_category(request):
+    ret={}
+    form = forms.CategoryForm(request.POST)
+    if form.is_valid():
+        models.Category.objects.create(**form.cleaned_data)
+        ret['status']=0
+    else:
+
+        error=form.getError()
+
+        ret['status'] = 1
+        ret['error'] = error
+    return JsonResponse(ret)
+
+@login_required()
+@csrf_exempt
+def edit_category(request,id):
+    ret={}
+    form = forms.CategoryForm(request.POST)
+    if form.is_valid():
+        models.Category.objects.filter(nid=id).update(**form.cleaned_data)
+        ret['status'] = 0
+    else:
+
+        error=form.getError()
+        ret['status'] = 1
+        ret['error'] = error
+
+    return JsonResponse(ret)
+
+@login_required()
+@csrf_exempt
+def del_category(request,id):
+    ret={}
+    models.Category.objects.filter(pk=id).delete()
+    ret['status']=0
+    return JsonResponse(ret)
+
+
 def upload(request):
 
     print(request.FILES)
@@ -105,3 +211,16 @@ def upload(request):
     }
 
     return JsonResponse(result)
+
+
+def blog(request):
+    return render(request,'blog.html',locals())
+
+def about(request):
+    return render(request,'about.html',locals())
+
+def contact(request):
+    return render(request,'contact.html',locals())
+
+def single(request):
+    return render(request,'single.html',locals())
