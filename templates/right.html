@@ -3,15 +3,13 @@
                     <div class="widget widget-recent-posts">
                         <h3 class="widget-title">标签</h3>
                         <ul>
-                            <li>
-                                <a href="#">标签1</a>
-                            </li>
-                            <li>
-                                <a href="#">标签2</a>
-                            </li>
-                            <li>
-                                <a href="#">标签3</a>
-                            </li>
+                            {% for item in tag_list %}
+                                 <li>
+                                <a href="#">{{ item.title }}</a>
+                                </li>
+                            {% endfor %}
+                            
+
                         </ul>
                     </div>
                     <!-- 归档 -->
@@ -33,15 +31,11 @@
                     <div class="widget widget-category">
                         <h3 class="widget-title">分类</h3>
                         <ul>
-                            <li>
-                                <a href="#">linux</a>
-                            </li>
-                            <li>
-                                <a href="#">Python</a>
-                            </li>
-                            <li>
-                                <a href="#">SEO</a>
-                            </li>
+                            {% for item in category_list %}
+                                 <li>
+                                <a href="#">{{ item.title }}</a>
+                                </li>
+                            {% endfor %}
                         </ul>
                     </div>
                 </aside>

@@ -39,7 +39,9 @@
                     </article>
                 </main>
                  <!-- 右侧 -->
-                {% include 'right.html' %}
+{#                {% include 'right.html' %}#}
+                {% load my_tags %}
+                {% getRight %}
             </div>
         </div>
     </div>
