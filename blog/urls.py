@@ -27,13 +27,18 @@ urlpatterns = [
     path('blog/',views.blog),
     path('about/',views.about),
     path('contact/',views.contact),
-    path('single/',views.single),
+    path('single/<id>/',views.single),
     path('login/',views.login),
     path('logout/',views.logout,name='logout'),
     path('user/',views.user),
     path('manage/',views.manage),
     path('manage/userinfo/',views.userinfo),
+
     path('manage/article/',views.article),
+    path('manage/ajaxGetArticle/<id>/',views.ajaxGetArticle),
+    path('manage/add_article/',views.add_article),
+    path('manage/edit_article/<id>/', views.edit_article),
+    path('manage/del_article/<id>/', views.del_article),
 
     path('manage/tag/',views.tag),
     path('manage/add_tag/', views.add_tag),
@@ -46,5 +51,6 @@ urlpatterns = [
     path('manage/del_category/<id>/',views.del_category),
 
     re_path(r"media/(?P<path>.*)$",serve,{"document_root":settings.MEDIA_ROOT}),
+    path('upload/',views.upload ),
 
 ]

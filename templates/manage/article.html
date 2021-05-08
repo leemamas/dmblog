@@ -4,62 +4,406 @@
     <!-- 右侧-->
     <div class="page-holder w-100 d-flex flex-wrap">
         <div class="container-fluid px-xl-5">
-          <section class="py-5">
-            <div class="row">
-              <div class="col-lg-12 mb-5">
-                <div class="card">
-                  <div class="card-header">
-                    <h6 class="text-uppercase mb-0">文章列表</h6>
+            <section class="py-5">
+                <div class="row">
+                    <div class="col-lg-12 mb-5">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="text-uppercase mb-0">文章列表</h6>
 
-                  </div>
-
-
-                  <div class="card-body">
-                      <button type="button" class="btn btn-success">新增</button>
-                      <button type="button" class="btn btn-danger">删除</button>
+                            </div>
 
 
-                    <table class="table table-striped table-hover card-text ">
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>First Name</th>
-                          <th>Last Name</th>
-                          <th>Username</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <th scope="row">1</th>
-                          <td>Mark</td>
-                          <td>Otto</td>
-                          <td>@mdo</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">2</th>
-                          <td>Jacob</td>
-                          <td>Thornton</td>
-                          <td>@fat</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">3</th>
-                          <td>Larry</td>
-                          <td>the Bird</td>
-                          <td>@twitter                            </td>
-                        </tr>
-                        <tr>
-                          <th scope="row">3</th>
-                          <td>Sam</td>
-                          <td>Nevoresky</td>
-                          <td>@facebook                            </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+                            <div class="card-body">
+                                <button type="button" data-toggle="modal" data-target="#myModal"
+                                        class="btn btn-success">新增
+                                </button>
+
+                                <!-- 新增Modal-->
+                                <div id="myModal" tabindex="-1" role="dialog"
+                                     aria-labelledby="exampleModalLabel" aria-hidden="true"
+                                     class="modal fade text-md-left">
+                                    <div role="document" class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 id="exampleModalLabel" class="modal-title">新增文章</h4>
+                                                <button type="button" data-dismiss="modal"
+                                                        aria-label="Close" class="close"><span
+                                                        aria-hidden="true">×</span></button>
+                                            </div>
+                                            <div class="modal-body">
+
+                                                <form class="form-horizontal" id="addForm">
+                                                    {% csrf_token %}
+                                                    <div class="form-group row">
+                                                        <label class="col-md-1 form-control-label">标题</label>
+                                                        <div class="col-md-11">
+                                                            <input type="text" name="title" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="line"></div>
+
+                                                    <div class="form-group row">
+                                                        <label class="col-md-1 form-control-label">内容</label>
+                                                        <div class="col-md-11">
+                                                            <textarea class="form-control" rows="10"
+                                                                      style="resize: none" name="content"
+                                                                      id="addcontent"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="line"></div>
+
+                                                    <div class="form-group row">
+                                                        <label class="col-md-1 form-control-label">分类</label>
+                                                        <div class="col-md-11 select mb-3">
+                                                            <select name="category" class="form-control">
+                                                                <option value="">------选择分类-------</option>
+                                                                {% for item in category_list %}
+                                                                    <option value="{{ item.pk }}">{{ item.title }}</option>
+                                                                {% endfor %}
+
+
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="line"></div>
+
+                                                    <div class="form-group row">
+                                                        <label class="col-md-1 form-control-label">标签</label>
+                                                        <div class="col-md-11 ml-auto select">
+                                                            <select multiple="" name="tag" class="form-control rounded">
+                                                                {% for item in tag_list %}
+                                                                    <option value="{{ item.pk }}">{{ item.title }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                </form>
+
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" data-dismiss="modal"
+                                                        class="btn btn-secondary">Close
+                                                </button>
+                                                <button type="button" class="btn btn-primary save">Save
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <table class="table table-striped table-hover card-text ">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>标题</th>
+                                        <th>发布时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    {% for item in article_list %}
+
+                                        <tr>
+                                            <th scope="row">{{ forloop.counter }}</th>
+                                            <td>{{ item.title }}</td>
+                                            <td>{{ item.create_time|date:"Y-m-d H:i" }}</td>
+                                            <td>
+                                                <a href="" data-toggle="modal" data-target="#editModal"
+                                                   id="edit" onclick="edit({{ item.pk }})">
+                                                    <img src="/static/manage/img/edit.png" width="18px" title="编辑">
+                                                </a>
+
+
+                                                &nbsp &nbsp &nbsp
+                                                <a data-toggle="modal" data-target="#deleteModal"
+                                                   id="delete" onclick="del({{ item.pk }},'{{ item.title }}')"><img
+                                                        src="/static/manage/img/del.png" width="18px"
+                                                        title="删除"></a>
+
+
+                                            </td>
+                                        </tr>
+
+
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+
+                                <!-- 编辑Modal-START-->
+                                <div id="editModal" tabindex="-1" role="dialog"
+                                     aria-labelledby="exampleModalLabel" aria-hidden="true"
+                                     class="modal fade text-left">
+                                    <div role="document" class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 id="exampleModalLabel" class="modal-title">编辑文章</h4>
+                                                <button type="button" data-dismiss="modal"
+                                                        aria-label="Close" class="close"><span
+                                                        aria-hidden="true">×</span></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="editform" enctype="multipart/form-data">
+                                                    <div class="form-group row">
+                                                        <label class="col-md-1 form-control-label">标题</label>
+                                                        <div class="col-md-11">
+                                                            <input type="text" name="edittitle" class="form-control">
+                                                            <input type="hidden" name="editid">
+                                                        </div>
+                                                    </div>
+                                                    <div class="line"></div>
+
+                                                    <div class="form-group row">
+                                                        <label class="col-md-1 form-control-label">内容</label>
+                                                        <div class="col-md-11">
+                                                            <textarea class="form-control" rows="10"
+                                                                      style="resize: none" name="editcontent"
+                                                                      id="editcontent"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="line"></div>
+
+                                                    <div class="form-group row">
+                                                        <label class="col-md-1 form-control-label">分类</label>
+                                                        <div class="col-md-11 select mb-3">
+                                                            <select name="editcategory" id="editcategory"
+                                                                    class="form-control">
+                                                                <option value="">------选择分类-------</option>
+                                                                {% for item in category_list %}
+                                                                    <option value="{{ item.pk }}">{{ item.title }}</option>
+                                                                {% endfor %}
+
+
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="line"></div>
+
+                                                    <div class="form-group row">
+                                                        <label class="col-md-1 form-control-label">标签</label>
+                                                        <div class="col-md-11 ml-auto select">
+                                                            <select multiple="" name="edittag" id="edittag"
+                                                                    class="form-control rounded">
+                                                                {% for item in tag_list %}
+                                                                    <option value="{{ item.pk }}">{{ item.title }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                </form>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" data-dismiss="modal"
+                                                        class="btn btn-secondary">Close
+                                                </button>
+                                                <button type="button" class="btn btn-primary update">
+                                                    Update
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 编辑Modal-END-->
+
+                                <!-- 删除Modal-START-->
+                                <div id="deleteModal" tabindex="-1" role="dialog"
+                                     aria-labelledby="exampleModalLabel" aria-hidden="true"
+                                     class="modal fade text-left">
+                                    <div role="document" class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 id="exampleModalLabel" class="modal-title">删除文章</h4>
+                                                <button type="button" data-dismiss="modal"
+                                                        aria-label="Close" class="close"><span
+                                                        aria-hidden="true">×</span></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>你真的要删除文章？<span name="deltitle"></span></p>
+                                                <input type="hidden" name="delid">
+
+                                                </form>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" data-dismiss="modal"
+                                                        class="btn btn-secondary">Close
+                                                </button>
+                                                <button type="button" class="btn btn-danger delete">
+                                                    Delete
+                                                </button>
+                                                <input type="hidden" value="{{ item.pk }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 删除Modal-END-->
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </div>
-          </section>
+            </section>
         </div>
     </div>
+    <script charset="utf-8" src="/static/manage/kindeditor/kindeditor-all.js"></script>
+    <script charset="utf-8" src="/static/manage/kindeditor/lang/zh-CN.js"></script>
+    <script src="/static/plugin/js/jquery-2.1.3.min.js"></script>
+    <script>
+
+        KindEditor.ready(function (K) {
+            window.editor = K.create('#addcontent', {
+                width: '100%',
+                height: '600',
+                resizeType: '0',
+                uploadJson: '/upload/',
+                extraFileUploadParams: {
+                    csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val(),
+                },
+                //解决获取不了textarea值
+                afterBlur: function () {
+                    this.sync();
+                },
+                filePostName: 'upload_img',
+            });
+        });
+        var editcontent
+        KindEditor.ready(function (K) {
+            editcontent = K.create('#editcontent', {
+                width: '100%',
+                height: '600',
+                resizeType: '0',
+                uploadJson: '/upload/',
+                extraFileUploadParams: {
+                    csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val(),
+                },
+                //解决获取不了textarea值
+                afterBlur: function () {
+                    this.sync();
+                },
+                filePostName: 'upload_img',
+            });
+        });
+
+
+        $('.save').click(function () {
+            var formdata = new FormData()
+            var request_data = $("#addForm").serializeArray();
+            $.each(request_data, function (index, data) {
+
+                formdata.append(data.name, data.value)
+            })
+            $.ajax({
+                url: '/manage/add_article/',
+                type: 'post',
+                contentType: false,
+                processData: false,
+                data: formdata,
+                success: function (data) {
+                    if (data.status == 0) {
+                        //success
+                        location.href = '/manage/article/'
+                    } else {
+                        //failure
+                        console.log(data.status)
+                    }
+
+                }
+            })
+
+        })
+
+
+        function edit(id) {
+
+            $.ajax({
+                url: '/manage/ajaxGetArticle/' + id + '/',
+                type: 'post',
+                data: {
+                    csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val(),
+                },
+                success: function (data) {
+
+                    //清空多选框选中
+                    $("#edittag option").attr("selected", false);
+
+                    if (data.status == 0) {
+                        //success
+
+                        $("#editModal").find("input[name='editid']").val(data.data.id)
+                        $("#editModal").find("input[name='edittitle']").val(data.data.title)
+                        editcontent.html(data.data.content)
+                        $("#editcategory").val(data.data.category)
+                        for (var i = 0; i < data.data.tags.length; i++) {
+                            $("#edittag option").each(function () {
+                                if ($(this).val() == data.data.tags[i]) {
+                                    $(this).attr("selected", true);
+                                }
+                            })
+                        }
+                        editcontent.sync()
+                    } else {
+                        //failure
+                        console.log(data.status)
+                    }
+
+                }
+            })
+        }
+
+
+        $('.update').click(function () {
+
+
+            var id = $("[name='editid']").val()
+            $.ajax({
+                url: '/manage/edit_article/' + id + '/',
+                type: 'post',
+                data: {
+                    csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val(),
+                    title: $("[name='edittitle']").val(),
+                    content: editcontent.html(),
+                    category: $("[name='editcategory']").val(),
+                    tag: $("[name='edittag']").val(),
+                },
+                success: function (data) {
+                    if (data.status == 0) {
+                        location.href = '/manage/article/'
+                    } else {
+                        console.log()
+                    }
+
+                }
+            })
+        })
+
+
+        function del(id, val) {
+            $("#deleteModal").find("input[name='delid']").val(id)
+            $("#deleteModal").find("span[name='deltitle']").text('【' + val + '】')
+        }
+
+        $('.delete').click(function () {
+            var id = $("[name='delid']").val()
+            $.ajax({
+                url: '/manage/del_article/' + id + '/',
+                type: 'post',
+                data: {},
+                success: function (data) {
+                    if (data.status == 0) {
+                        location.href = '/manage/article/'
+                    } else {
+
+                    }
+
+                }
+            })
+        })
+    </script>
+
 {% endblock %}

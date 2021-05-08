@@ -15,13 +15,15 @@ class Article(models.Model):
     nid = models.AutoField(primary_key=True)
     title = models.CharField(verbose_name='文章标题', max_length=50)
     desc = models.CharField(verbose_name='描述', max_length=255)
-    create_time = models.DateTimeField(verbose_name='发布时间', auto_now_add=True)
-    modify_time = models.DateTimeField('修改时间', auto_now=True)
+
     content = models.TextField()
 
     user = models.ForeignKey(verbose_name='作者', to='User', to_field='nid', on_delete=models.CASCADE)
     category = models.ForeignKey(to='Category', to_field='nid', null=True, on_delete=models.CASCADE)
     tags = models.ManyToManyField(to='Tag', through='Article2Tag', through_fields=('article', 'tag'))
+
+    create_time = models.DateTimeField(verbose_name='发布时间', auto_now_add=True)
+    modify_time = models.DateTimeField('修改时间', auto_now=True)
 
 ##分类
 class Category(models.Model):

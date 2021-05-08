@@ -15,6 +15,7 @@ def test(request):
 
 
 def index(request):
+    article_list = models.Article.objects.all()
     return render(request,'index.html',locals())
 
 
@@ -98,7 +99,85 @@ def user(request):
 
 @login_required()
 def article(request):
+
+    tag_list = models.Tag.objects.all()
+    category_list = models.Category.objects.all()
+    article_list=models.Article.objects.all()
+
     return render(request,'manage/article.html',locals())
+
+def ajaxGetArticle(request,id):
+    ret={}
+    obj_article=models.Article.objects.filter(pk=id).first()
+    tags=obj_article.tags.all()
+    taglist=[]
+    for tag in tags:
+        taglist.append(tag.pk)
+
+    data={
+        'id':obj_article.pk,
+        'title':obj_article.title,
+        'content':obj_article.content,
+        'category':obj_article.category_id,
+        'tags':taglist,
+    }
+    ret['status']=0
+    ret['data']=data
+
+    return JsonResponse(ret)
+
+
+
+@login_required()
+@csrf_exempt
+def add_article(request):
+    ret = {}
+    #print('data:',request.POST)
+    title=request.POST.get('title')
+    content=request.POST.get('content')
+    category=request.POST.get('category')
+    tags_list=request.POST.getlist('tag')
+    #print('category:',category)
+    #print('tags_list:',tags_list)
+    obj=models.Article.objects.create(title=title,content=content,category_id=category,user=request.user)
+    for tag in tags_list:
+        obj.tags.add(tag)
+    ret['status'] = 0
+
+    return JsonResponse(ret)
+
+
+
+@login_required()
+@csrf_exempt
+def edit_article(request,id):
+
+    title = request.POST.get('title')
+    content = request.POST.get('content')
+    category = request.POST.get('category')
+    tags_list = request.POST.getlist('tag[]')
+
+    models.Article.objects.filter(pk=id).update(title=title,content=content,category_id=category)
+    obj=models.Article.objects.get(pk=id)
+
+    obj.tags.clear()
+    obj.tags.add(*tags_list)
+    obj.save()
+
+    ret = {}
+    ret['status'] = 0
+
+    return JsonResponse(ret)
+
+
+@login_required()
+@csrf_exempt
+def del_article(request,id):
+    ret={}
+    models.Article.objects.filter(pk=id).delete()
+    ret['status']=0
+    return JsonResponse(ret)
+
 
 
 #############################【标签】#####################################
@@ -198,16 +277,18 @@ def del_category(request,id):
 
 def upload(request):
 
-    print(request.FILES)
+
     img=request.FILES.get('upload_img')
-    path=os.path.join(settings.MEDIA_ROOT,'article_img',img.name)
+    path=os.path.join(settings.MEDIA_ROOT,'img/article/',img.name)
     #TODO 没创建文件夹会出错
     with open(path,'wb') as f:
         for line in img:
             f.write(line)
+    #print(request.FILES)
+    #print('img:',img.name)
     result={
         'error':0,
-        'url':'/media/article_img/%s'%img.name
+        'url':'/media/img/article/%s'%img.name
     }
 
     return JsonResponse(result)
@@ -222,5 +303,6 @@ def about(request):
 def contact(request):
     return render(request,'contact.html',locals())
 
-def single(request):
+def single(request,id):
+    article_list = models.Article.objects.filter(pk=id).all()
     return render(request,'single.html',locals())
