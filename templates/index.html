@@ -2,22 +2,57 @@
 {% block css %}
 
     <style>
+        .label {
+            height: 20px;
+            margin-right: 5px;
+            padding: 0 10px;
+            background-color: #f33737;
+            display: inline-block;
+            position: relative;
+            color: #fff;
+            font-size: 10px;
+            line-height: 19px;
+            vertical-align: baseline;
+            white-space: nowrap;
+            border-bottom: none;
+            top: -3px;
+        }
+
+        .label .label-arrow {
+            position: absolute;
+            top: 7px;
+            right: -4px;
+            border-left: 4px solid #f33737;
+            border-top: 4px solid transparent;
+            border-bottom: 4px solid transparent;
+        }
+
+        .titletag {
+            padding-left: 18px;
+            background: url("/static/front/img/titletag.png") no-repeat center;
+            background-position: 0px 4px;
+
+        }
+
         .titletime {
             padding-left: 18px;
             background: url("/static/front/img/titletag.png") no-repeat center;
             background-position: 0px -45px;
         }
-        .titlecomment{
+
+        .titlecomment {
             padding-left: 18px;
             background: url("/static/front/img/titletag.png") no-repeat center;
             background-position: 0px -20px;
         }
-        .titleview{
+
+        .titleview {
             padding-left: 18px;
             background: url("/static/front/img/titletag.png") no-repeat center;
             background-position: 0px -70px;
         }
-        .toparticles{
+
+        .toparticles {
             font-size: 16px;
             font-weight: bold;
             line-height: 36px;
@@ -36,35 +71,37 @@
                 <!-- 左侧 -->
                 <main class="col-md-8">
 
-                    <div id="slidershow" class="carousel slide" data-ride="carousel" data-interval = 2000 data-pause = "hover" data-wrap="true" style="margin-bottom: 5rem; width: 100%;height: 100%; margin-left:auto; margin-right:auto;">
-                         <!-- 设置图片轮播的顺序 -->
-                         <ol class="carousel-indicators">
-                         <li class="active" data-target="#slidershow" data-slide-to="0" ></li>
-                         <li data-target="#slidershow" data-slide-to="1"></li>
-                         <li data-target="#slidershow" data-slide-to="2"></li>
-                         <li data-target="#slidershow" data-slide-to="3"></li>
-                         </ol>
-                         <!--设置轮播的图片-->
-                         <div class="carousel-inner">
-                             <div class="item active">
+                    <div id="slidershow" class="carousel slide" data-ride="carousel" data-interval=2000
+                         data-pause="hover" data-wrap="true"
+                         style="margin-bottom: 5rem; width: 100%;height: 100%; margin-left:auto; margin-right:auto;">
+                        <!-- 设置图片轮播的顺序 -->
+                        <ol class="carousel-indicators">
+                            <li class="active" data-target="#slidershow" data-slide-to="0"></li>
+                            <li data-target="#slidershow" data-slide-to="1"></li>
+                            <li data-target="#slidershow" data-slide-to="2"></li>
+                            <li data-target="#slidershow" data-slide-to="3"></li>
+                        </ol>
+                        <!--设置轮播的图片-->
+                        <div class="carousel-inner">
+                            <div class="item active">
                                 <a href="##"><img src="/static/front/img/sl1.jpg" alt="cat1"></a>
-                             </div>
-                             <div class="item">
+                            </div>
+                            <div class="item">
                                 <a href="##"><img src="/static/front/img/sl2.jpg" alt="cat2"></a>
-                             </div>
-                             <div class="item">
+                            </div>
+                            <div class="item">
                                 <a href="##"><img src="/static/front/img/sl3.jpg" alt="cat3"></a>
-                             </div>
-                             <div class="item">
+                            </div>
+                            <div class="item">
                                 <a href="##"><img src="/static/front/img/sl4.jpg" alt="cat3"></a>
                             </div>
-                         </div>
-                         <a class="left carousel-control" href="#slidershow" role="button" data-slide="prev" >
-                         <span class="glyphicon glyphicon-chevron-left"><</span>
-                         </a>
-                         <a class="right carousel-control" href="#slidershow" role="button" data-slide="next">
-                         <span class="glyphicon glyphicon-chevron-right">></span>
-                         </a>
+                        </div>
+                        <a class="left carousel-control" href="#slidershow" role="button" data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left"><</span>
+                        </a>
+                        <a class="right carousel-control" href="#slidershow" role="button" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right">></span>
+                        </a>
                     </div>
 
 
@@ -91,9 +128,9 @@
                                            <a>{{ item.create_time|date:"Y-m-d H:i" }} </a>
                                     </span>
 
-{#                                    <span class="titlecomment"><a href="#">999</a></span>#}
-{##}
-{#                                    <span class="titleview"><a href="#">888</a></span>#}
+                                    {#                                    <span class="titlecomment"><a href="#">999</a></span>#}
+                                    {##}
+                                    {#                                    <span class="titleview"><a href="#">888</a></span>#}
 
                                 </div>
                             </header>
@@ -119,7 +156,8 @@
                         <div class="panel-heading">关于我</div>
                         <div class="media">
                             <a class="media-left" style="padding-left: 5px;">
-                                <img src="/media/img/avatars/default.jpg" width="80" height="80" alt="" style="border-radius:45px;">
+                                <img src="/media/img/avatars/default.jpg" width="80" height="80" alt=""
+                                     style="border-radius:45px;">
                             </a>
                             <div class="media-body" style="padding-left: 5px;padding-top: 15px;">
                                 <h3 class="media-heading">
@@ -130,10 +168,10 @@
                         </div>
                     </div>
 
-                     <div class="panel panel-default">
-                       <div class="panel-heading">友情连接</div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">友情连接</div>
                         <div class="panel-body">
-                             <span><a href="http://www.baidu.com">百度</a></span>
+                            <span><a href="http://www.baidu.com">百度</a></span>
                         </div>
 
                     </div>

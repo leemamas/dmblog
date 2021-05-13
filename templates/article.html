@@ -44,15 +44,21 @@
                             <header class="entry-header">
 
                                 <h1 class="entry-title">
-                                    <a class="label">{{ item.category.title }}<i class="label-arrow"></i></a>
+                                    {% if item.category %}
+                                        <a class="label">{{ item.category.title }}<i class="label-arrow"></i></a>
+                                    {% endif %}
                                     <a href="/article/{{ item.pk }}/">{{ item.title }}</a>
                                 </h1>
                                 <div class="entry-meta">
-                                    <span class="titletag">
+
                                         {% for tag in item.tags.all %}
-                                            <a href="">{{ tag.title }},</a>
+                                            <span class="titletag">
+                                                <a href="">{{ tag.title }},</a>
+                                            </span>
+                                            {% empty %}
+
                                         {% endfor %}
-                                    </span>
+
 
                                     <span class="titletime">
                                            <a>{{ item.create_time|date:"Y-m-d H:i" }} </a>
@@ -74,7 +80,25 @@
 
                         </article>
 
+
                     {% endfor %}
+
+                    <hr>
+                    <!-- 分页 -->
+                    <div class="text-center">
+                        <a href="/article?page=1">首页</a>
+                        {% if article_list.has_previous %}
+                            <a href="/article?page={{ article_list.previous_page_number }}">上一页</a>
+                        {% endif %}
+                        {% for num in article_list.paginator.page_range %}
+                            <a href="/article?page={{ num }}"> 【{{ num }}】</a>
+                        {% endfor %}
+                        {% if posts.has_next %}
+                            <a href="/article?page={{ article_list.next_page_number }}">下一页</a>
+                        {% endif %}
+                        <a href="/article?page={{ article_list.paginator.num_pages }}">尾页</a>
+
+                    </div>
 
                 </main>
 

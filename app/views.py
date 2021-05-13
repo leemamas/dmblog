@@ -8,7 +8,7 @@ from app import forms,models
 from blog import settings
 from django.views.decorators.csrf import csrf_exempt
 from bs4 import BeautifulSoup
-
+from django.core.paginator import Paginator
 
 # Create your views here.
 def test(request):
@@ -313,7 +313,16 @@ def upload(request):
 
 
 def article(request):
-    article_list = models.Article.objects.all()
+    list = models.Article.objects.all()
+
+    current_page=request.GET.get('page')
+    paginator=Paginator(list,7)
+
+    try:
+        article_list=paginator.get_page(current_page)
+    except:
+        article_list=paginator.get_page(1)
+
     return render(request,'article.html',locals())
 
 def about(request):
