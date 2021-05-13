@@ -1,4 +1,32 @@
 ﻿{% extends 'base.html' %}
+{% block css %}
+
+    <style>
+        .titletime {
+            padding-left: 18px;
+            background: url("/static/front/img/titletag.png") no-repeat center;
+            background-position: 0px -45px;
+        }
+        .titlecomment{
+            padding-left: 18px;
+            background: url("/static/front/img/titletag.png") no-repeat center;
+            background-position: 0px -20px;
+        }
+        .titleview{
+            padding-left: 18px;
+            background: url("/static/front/img/titletag.png") no-repeat center;
+            background-position: 0px -70px;
+        }
+        .toparticles{
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 36px;
+            color: #333;
+            border-bottom: #db6d4c 4px solid;
+        }
+
+    </style>
+{% endblock %}
 {% block content %}
     <!-- 内容区 -->
     <div class="content-body">
@@ -7,32 +35,72 @@
 
                 <!-- 左侧 -->
                 <main class="col-md-8">
+
+                    <div id="slidershow" class="carousel slide" data-ride="carousel" data-interval = 2000 data-pause = "hover" data-wrap="true" style="margin-bottom: 5rem; width: 100%;height: 100%; margin-left:auto; margin-right:auto;">
+                         <!-- 设置图片轮播的顺序 -->
+                         <ol class="carousel-indicators">
+                         <li class="active" data-target="#slidershow" data-slide-to="0" ></li>
+                         <li data-target="#slidershow" data-slide-to="1"></li>
+                         <li data-target="#slidershow" data-slide-to="2"></li>
+                         <li data-target="#slidershow" data-slide-to="3"></li>
+                         </ol>
+                         <!--设置轮播的图片-->
+                         <div class="carousel-inner">
+                             <div class="item active">
+                                <a href="##"><img src="/static/front/img/sl1.jpg" alt="cat1"></a>
+                             </div>
+                             <div class="item">
+                                <a href="##"><img src="/static/front/img/sl2.jpg" alt="cat2"></a>
+                             </div>
+                             <div class="item">
+                                <a href="##"><img src="/static/front/img/sl3.jpg" alt="cat3"></a>
+                             </div>
+                             <div class="item">
+                                <a href="##"><img src="/static/front/img/sl4.jpg" alt="cat3"></a>
+                            </div>
+                         </div>
+                         <a class="left carousel-control" href="#slidershow" role="button" data-slide="prev" >
+                         <span class="glyphicon glyphicon-chevron-left"><</span>
+                         </a>
+                         <a class="right carousel-control" href="#slidershow" role="button" data-slide="next">
+                         <span class="glyphicon glyphicon-chevron-right">></span>
+                         </a>
+                    </div>
+
+
+                    <div class="toparticles">推荐文章</div>
+
                     <!-- 文章 -->
 
                     {% for item in article_list %}
                         <article class="post post-1">
                             <header class="entry-header">
+
                                 <h1 class="entry-title">
-                                    <a href="/single/{{ item.pk }}/">{{ item.title }}</a>
+                                    <a class="label">{{ item.category.title }}<i class="label-arrow"></i></a>
+                                    <a href="/article/{{ item.pk }}/">{{ item.title }}</a>
                                 </h1>
                                 <div class="entry-meta">
-                                    <span class="post-category"><a href="#">Written by</a></span>
-
-                                    <span class="post-date">
-                                        <a href="#">
-                                            <time>{{ item.create_time|date:"Y-m-d H:i" }}</time>
-                                        </a>
+                                    <span class="titletag">
+                                        {% for tag in item.tags.all %}
+                                            <a href="">{{ tag.title }},</a>
+                                        {% endfor %}
                                     </span>
 
-                                    <span class="post-author"><a href="#">Albert Einstein</a></span>
+                                    <span class="titletime">
+                                           <a>{{ item.create_time|date:"Y-m-d H:i" }} </a>
+                                    </span>
 
-                                    <span class="comments-link"><a href="#">4 Comments</a></span>
+{#                                    <span class="titlecomment"><a href="#">999</a></span>#}
+{##}
+{#                                    <span class="titleview"><a href="#">888</a></span>#}
+
                                 </div>
                             </header>
                             <div class="entry-content clearfix">
-                                <p>{{ item.desc|safe }}</p>
+                                <p>{{ item.desc|safe }}.....</p>
                                 <div class="read-more cl-effect-14">
-                                    <a href="/single/{{ item.pk }}/" class="more-link">View More <span
+                                    <a href="/article/{{ item.pk }}/" class="more-link">View More <span
                                             class="meta-nav">→</span></a>
                                 </div>
                             </div>
@@ -44,8 +112,35 @@
                 </main>
 
                 <!-- 右侧 -->
-                {% load my_tags %}
-                {% getRight %}
+
+                <div class="col-md-3">
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">关于我</div>
+                        <div class="media">
+                            <a class="media-left" style="padding-left: 5px;">
+                                <img src="/media/img/avatars/default.jpg" width="80" height="80" alt="" style="border-radius:45px;">
+                            </a>
+                            <div class="media-body" style="padding-left: 5px;padding-top: 15px;">
+                                <h3 class="media-heading">
+                                    呆马
+                                </h3>
+                                <p>人类被研究对象</p>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="panel panel-default">
+                       <div class="panel-heading">友情连接</div>
+                        <div class="panel-body">
+                             <span><a href="http://www.baidu.com">百度</a></span>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- 右侧END -->
+
             </div>
         </div>
     </div>

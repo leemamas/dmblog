@@ -1,15 +1,28 @@
 {% extends 'base.html' %}
+{% block css %}
+    <style>
+    .xxx img{
+        max-width:800px
+    }
+    </style>
+{% endblock %}
+
 {% block content %}
     <div class="content-body">
         <div class="container">
+        <ol class="breadcrumb">
+          <li><a href="/">Home</a></li>
+          <li><a href="/article/">article</a></li>
+          <li><a href="/article/{{ id }}">{{ id }}</a></li>
+        </ol>
             <div class="row">
-                <main class="col-md-8">
+                <main class="col-md-12">
                     {% for article in article_list %}
                     <article class="post post-1">
                         <header class="entry-header">
                             <h1 class="entry-title">{{ article.title}}</h1>
                             <div class="entry-meta">
-                                <span class="post-category"><a href="#">Web Design</a></span>
+                                <span class="post-category"><a href="#">{{ article.tags_title }}{% for item in article.tags.all %}{{ item.title }} {% endfor %}||Web Design</a></span>
 
                                 <span class="post-date"><a href="#"><time class="entry-date"
                                                                           datetime="2012-11-09T23:15:57+00:00">February 2, 2013</time></a></span>
@@ -19,7 +32,7 @@
                                 <span class="comments-link"><a href="#">4 Comments</a></span>
                             </div>
                         </header>
-                        <div class="entry-content clearfix">
+                        <div class="entry-content clearfix xxx">
                             {{ article.content|safe }}
                         </div>
                     </article>
@@ -29,8 +42,8 @@
                 </main>
                  <!-- 右侧 -->
 {#                {% include 'right.html' %}#}
-                {% load my_tags %}
-                {% getRight %}
+{#                {% load my_tags %}#}
+{#                {% getRight %}#}
             </div>
         </div>
     </div>

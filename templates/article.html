@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block css %}
+
+    <style>
+        .titletime {
+            padding-left: 18px;
+            background: url("/static/front/img/titletag.png") no-repeat center;
+            background-position: 0px -45px;
+        }
+        .titlecomment{
+            padding-left: 18px;
+            background: url("/static/front/img/titletag.png") no-repeat center;
+            background-position: 0px -20px;
+        }
+        .titleview{
+            padding-left: 18px;
+            background: url("/static/front/img/titletag.png") no-repeat center;
+            background-position: 0px -70px;
+        }
+        .toparticles{
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 36px;
+            color: #333;
+            border-bottom: #db6d4c 4px solid;
+        }
+
+    </style>
+{% endblock %}
+{% block content %}
+    <!-- 内容区 -->
+    <div class="content-body">
+        <div class="container">
+            <div class="row">
+
+                <!-- 左侧 -->
+                <main class="col-md-8">
+
+
+                    <!-- 文章 -->
+
+                    {% for item in article_list %}
+                        <article class="post post-1">
+                            <header class="entry-header">
+
+                                <h1 class="entry-title">
+                                    <a class="label">{{ item.category.title }}<i class="label-arrow"></i></a>
+                                    <a href="/article/{{ item.pk }}/">{{ item.title }}</a>
+                                </h1>
+                                <div class="entry-meta">
+                                    <span class="titletag">
+                                        {% for tag in item.tags.all %}
+                                            <a href="">{{ tag.title }},</a>
+                                        {% endfor %}
+                                    </span>
+
+                                    <span class="titletime">
+                                           <a>{{ item.create_time|date:"Y-m-d H:i" }} </a>
+                                    </span>
+
+{#                                    <span class="titlecomment"><a href="#">999</a></span>#}
+{##}
+{#                                    <span class="titleview"><a href="#">888</a></span>#}
+
+                                </div>
+                            </header>
+                            <div class="entry-content clearfix">
+                                <p>{{ item.desc|safe }}.....</p>
+                                <div class="read-more cl-effect-14">
+                                    <a href="/article/{{ item.pk }}/" class="more-link">View More <span
+                                            class="meta-nav">→</span></a>
+                                </div>
+                            </div>
+
+                        </article>
+
+                    {% endfor %}
+
+                </main>
+
+                <!-- 右侧 -->
+                {% load my_tags %}
+                {% getRight %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

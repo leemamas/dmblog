@@ -1,41 +1,64 @@
-<aside class="col-md-4">
-                    <!-- 标签 -->
-                    <div class="widget widget-recent-posts">
-                        <h3 class="widget-title">标签</h3>
-                        <ul>
-                            {% for item in tag_list %}
-                                 <li>
-                                <a href="#">{{ item.title }}</a>
-                                </li>
-                            {% endfor %}
-                            
+<style>
+    .label {
+        height: 20px;
+        margin-right: 5px;
+        padding: 0 10px;
+        background-color: #31b0d5;
+        display: inline-block;
+        position: relative;
+        color: #fff;
+        font-size: 10px;
+        line-height: 19px;
+        vertical-align: baseline;
+        white-space: nowrap;
+        border-bottom: none;
+        top: -3px;
+    }
 
-                        </ul>
-                    </div>
-                    <!-- 归档 -->
-                    <div class="widget widget-archives">
-                        <h3 class="widget-title">归档</h3>
-                        <ul>
-                            <li>
-                                <a href="#">2020-09</a>
-                            </li>
-                            <li>
-                                <a href="#">2021-01</a>
-                            </li>
-                            <li>
-                                <a href="#">2021-03</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- 分类 -->
-                    <div class="widget widget-category">
-                        <h3 class="widget-title">分类</h3>
-                        <ul>
-                            {% for item in category_list %}
-                                 <li>
-                                <a href="#">{{ item.title }}</a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </aside>
+    .label .label-arrow {
+        position: absolute;
+        top: 7px;
+        right: -4px;
+        border-left: 4px solid #31b0d5;
+        border-top: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+    }
+
+    .titletag {
+        padding-left: 18px;
+        background: url("/static/front/img/titletag.png") no-repeat center;
+        background-position: 0px 4px;
+
+    }
+</style>
+
+<div class="col-md-3">
+
+
+            <div class="panel panel-default">
+                <div class="panel-heading">分类</div>
+                <div class="panel-body">
+                    {% for item in category_list %}
+                        <a class="label">
+                            {{ item.title }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">标签</div>
+                <div class="panel-body">
+                     {% for item in tag_list %}
+                        <span class="titletag">
+                            <a href="#">{{ item.title }}</a>
+                        </span>
+                     {% endfor %}
+                </div>
+            </div>
+
+
+
+
+
+</div>

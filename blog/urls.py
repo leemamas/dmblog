@@ -24,17 +24,20 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('test/',views.test),
     path('',views.index,name='home'),
-    path('blog/',views.blog),
+
     path('about/',views.about),
     path('contact/',views.contact),
-    path('single/<id>/',views.single),
+
     path('login/',views.login),
     path('logout/',views.logout,name='logout'),
     path('user/',views.user),
     path('manage/',views.manage),
     path('manage/userinfo/',views.userinfo),
 
-    path('manage/article/',views.article),
+    path('article/',views.article),
+    path('article/<id>/',views.articleinfo),
+
+    path('manage/article/',views.list_article),
     path('manage/ajaxGetArticle/<id>/',views.ajaxGetArticle),
     path('manage/add_article/',views.add_article),
     path('manage/edit_article/<id>/', views.edit_article),

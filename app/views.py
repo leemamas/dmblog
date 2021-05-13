@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from app import forms,models
 from blog import settings
 from django.views.decorators.csrf import csrf_exempt
+from bs4 import BeautifulSoup
 
 
 # Create your views here.
@@ -16,6 +17,7 @@ def test(request):
 
 def index(request):
     article_list = models.Article.objects.all()
+
     return render(request,'index.html',locals())
 
 
@@ -98,11 +100,12 @@ def user(request):
 
 
 @login_required()
-def article(request):
+def list_article(request):
 
     tag_list = models.Tag.objects.all()
     category_list = models.Category.objects.all()
     article_list=models.Article.objects.all()
+
 
     return render(request,'manage/article.html',locals())
 
@@ -132,14 +135,21 @@ def ajaxGetArticle(request,id):
 @csrf_exempt
 def add_article(request):
     ret = {}
-    #print('data:',request.POST)
+
     title=request.POST.get('title')
     content=request.POST.get('content')
     category=request.POST.get('category')
     tags_list=request.POST.getlist('tag')
-    #print('category:',category)
-    #print('tags_list:',tags_list)
-    obj=models.Article.objects.create(title=title,content=content,category_id=category,user=request.user)
+
+    soup=BeautifulSoup(content,'html.parser')
+    #过虑
+    for tag in soup.find_all():
+        if tag.name=='script':
+            tag.decompose()
+
+    desc=soup.text[0:150]
+
+    obj=models.Article.objects.create(title=title,content=str(soup),desc=desc,category_id=category,user=request.user)
     for tag in tags_list:
         obj.tags.add(tag)
     ret['status'] = 0
@@ -157,7 +167,15 @@ def edit_article(request,id):
     category = request.POST.get('category')
     tags_list = request.POST.getlist('tag[]')
 
-    models.Article.objects.filter(pk=id).update(title=title,content=content,category_id=category)
+    soup = BeautifulSoup(content, 'html.parser')
+    # 过虑
+    for tag in soup.find_all():
+        if tag.name == 'script':
+            tag.decompose()
+
+    desc = soup.text[0:150]
+
+    models.Article.objects.filter(pk=id).update(title=title,content=str(soup),desc=desc,category_id=category)
     obj=models.Article.objects.get(pk=id)
 
     obj.tags.clear()
@@ -294,8 +312,9 @@ def upload(request):
     return JsonResponse(result)
 
 
-def blog(request):
-    return render(request,'blog.html',locals())
+def article(request):
+    article_list = models.Article.objects.all()
+    return render(request,'article.html',locals())
 
 def about(request):
     return render(request,'about.html',locals())
@@ -303,6 +322,7 @@ def about(request):
 def contact(request):
     return render(request,'contact.html',locals())
 
-def single(request,id):
-    article_list = models.Article.objects.filter(pk=id).all()
-    return render(request,'single.html',locals())
+def articleinfo(request,id):
+    article_list = models.Article.objects.filter(pk=id)
+    print(article_list)
+    return render(request,'articleinfo.html',locals())
