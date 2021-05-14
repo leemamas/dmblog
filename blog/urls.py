@@ -37,18 +37,27 @@ urlpatterns = [
     path('article/',views.article),
     path('article/<id>/',views.articleinfo),
 
+    path('tag/',views.tag),
+    path('tag/<id>/',views.taginfo),
+
+
+    path('category/',views.category),
+    path('category/<id>/',views.categoryinfo),
+
+
+
     path('manage/article/',views.list_article),
     path('manage/ajaxGetArticle/<id>/',views.ajaxGetArticle),
     path('manage/add_article/',views.add_article),
     path('manage/edit_article/<id>/', views.edit_article),
     path('manage/del_article/<id>/', views.del_article),
 
-    path('manage/tag/',views.tag),
+    path('manage/tag/',views.list_tag),
     path('manage/add_tag/', views.add_tag),
     path('manage/edit_tag/<id>/', views.edit_tag),
     path('manage/del_tag/<id>/', views.del_tag),
 
-    path('manage/category/',views.category),
+    path('manage/category/',views.list_category),
     path('manage/add_category/',views.add_category),
     path('manage/edit_category/<id>/',views.edit_category),
     path('manage/del_category/<id>/',views.del_category),

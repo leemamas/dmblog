@@ -13,11 +13,10 @@
         <ol class="breadcrumb">
           <li><a href="/">Home</a></li>
           <li><a href="/article/">article</a></li>
-          <li><a href="/article/{{ id }}">{{ id }}</a></li>
+          <li><a href="/article/{{ id }}">{{ article.title }}</a></li>
         </ol>
             <div class="row">
                 <main class="col-md-12">
-                    {% for article in article_list %}
                     <article class="post post-1">
                         <header class="entry-header">
                             <h1 class="entry-title">{{ article.title}}</h1>
@@ -36,7 +35,6 @@
                             {{ article.content|safe }}
                         </div>
                     </article>
-                    {% endfor %}
 
 
                 </main>

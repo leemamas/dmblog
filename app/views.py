@@ -9,6 +9,7 @@ from blog import settings
 from django.views.decorators.csrf import csrf_exempt
 from bs4 import BeautifulSoup
 from django.core.paginator import Paginator
+from django.db.models import Count
 
 # Create your views here.
 def test(request):
@@ -200,8 +201,8 @@ def del_article(request,id):
 
 #############################【标签】#####################################
 @login_required()
-def tag(request):
-    list = models.Tag.objects.all()
+def list_tag(request):
+    list = models.Tag.objects.annotate(c=Count('article__title')).all()
     return render(request,'manage/tag.html',locals())
 
 @login_required()
@@ -247,9 +248,10 @@ def del_tag(request,id):
 
 
 ##############################【分类】############################################
+
 @login_required()
-def category(request):
-    list = models.Category.objects.all()
+def list_category(request):
+    list = models.Category.objects.annotate(c=Count('article__title')).all()
     return render(request,'manage/category.html',locals())
 
 @login_required()
@@ -332,6 +334,39 @@ def contact(request):
     return render(request,'contact.html',locals())
 
 def articleinfo(request,id):
-    article_list = models.Article.objects.filter(pk=id)
-    print(article_list)
+    article = models.Article.objects.filter(pk=id).first()
     return render(request,'articleinfo.html',locals())
+
+def tag(request):
+    list = models.Tag.objects.annotate(c=Count('article__title')).all()
+    return render(request, 'tag.html', locals())
+
+def taginfo(request,id):
+    tag = models.Tag.objects.filter(pk=id).first()
+    list =models.Article.objects.filter(tags=tag).all()
+
+    current_page = request.GET.get('page')
+    paginator = Paginator(list, 7)
+
+    try:
+        article_list = paginator.get_page(current_page)
+    except:
+        article_list = paginator.get_page(1)
+    return render(request,'taginfo.html',locals())
+
+def category(request):
+    list = models.Category.objects.annotate(c=Count('article__title')).all()
+    return render(request, 'category.html', locals())
+
+def categoryinfo(request,id):
+    category = models.Category.objects.filter(pk=id).first()
+    list = models.Article.objects.filter(category=category).all()
+
+    current_page = request.GET.get('page')
+    paginator = Paginator(list, 7)
+
+    try:
+        article_list = paginator.get_page(current_page)
+    except:
+        article_list = paginator.get_page(1)
+    return render(request,'categoryinfo.html',locals())

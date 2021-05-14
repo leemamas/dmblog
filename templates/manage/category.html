@@ -55,6 +55,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>名称</th>
+                                        <th>文章数</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
@@ -63,6 +64,7 @@
                                         <tr>
                                             <th scope="row">{{ forloop.counter }}</th>
                                             <td>{{ item.title }}</td>
+                                            <td>{{ item.c }}</td>
                                             <td>
                                                 <a href="" data-toggle="modal" data-target="#editModal"
                                                    id="edit" onclick="edit({{ item.pk }},'{{ item.title }}')">
@@ -186,7 +188,7 @@
                 }
             })
         })
-       function edit(id) {
+       function edit(id,val) {
            $("#editModal").find("input[name='editid']").val(id)
            $("#editModal").find("input[name='edittitle']").val(val)
         }

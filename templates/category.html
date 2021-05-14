@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block css %}
+
+    <style>
+        .titletime {
+            padding-left: 18px;
+            background: url("/static/front/img/titletag.png") no-repeat center;
+            background-position: 0px -45px;
+        }
+        .titlecomment{
+            padding-left: 18px;
+            background: url("/static/front/img/titletag.png") no-repeat center;
+            background-position: 0px -20px;
+        }
+        .titleview{
+            padding-left: 18px;
+            background: url("/static/front/img/titletag.png") no-repeat center;
+            background-position: 0px -70px;
+        }
+        .toparticles{
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 36px;
+            color: #333;
+            border-bottom: #db6d4c 4px solid;
+        }
+
+    </style>
+{% endblock %}
+{% block content %}
+    <!-- 内容区 -->
+    <div class="content-body">
+        <div class="container">
+            <div class="row">
+
+                <!-- 左侧 -->
+                <main class="col-md-8">
+
+
+                     <ol class="breadcrumb">
+                      <li><a href="/">Home</a></li>
+                      <li><a href="/category/">category</a></li>
+                    </ol>
+
+                    <!-- 文章 -->
+
+                    {% for item in list %}
+                        <article class="post post-1 text-left">
+                            <h4>
+                                <a href="/category/{{ item.pk }}/">{{ forloop.counter }}.{{ item.title }}({{ item.c }})</a>
+                            </h4>
+
+
+                        </article>
+                       {% if not forloop.last %}
+                            <hr>
+                        {% endif %}
+
+                    {% endfor %}
+
+
+
+                </main>
+
+                <!-- 右侧 -->
+                {% load my_tags %}
+                {% getRight %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

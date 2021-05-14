@@ -36,22 +36,27 @@
 
 
             <div class="panel panel-default">
-                <div class="panel-heading">分类</div>
+                <div class="panel-heading"><a href="/category/">Category</a></div>
                 <div class="panel-body">
                     {% for item in category_list %}
-                        <a class="label">
-                            {{ item.title }}
-                        </a>
+                        <li style="list-style-type:none;margin-bottom: 5px">
+                            <a class="label" href="/category/{{ item.pk }}/">
+                                {{ item.title }}({{ item.c }})
+                            </a>
+                        </li>
                     {% endfor %}
+
                 </div>
             </div>
 
             <div class="panel panel-default">
-                <div class="panel-heading">标签</div>
+                <div class="panel-heading"><a href="/tag/">Tag</a></div>
                 <div class="panel-body">
                      {% for item in tag_list %}
                         <span class="titletag">
-                            <a href="#">{{ item.title }}</a>
+                            <a  href="/tag/{{ item.pk }}/">
+                                {{ item.title }}({{ item.c }})
+                            </a>
                         </span>
                      {% endfor %}
                 </div>

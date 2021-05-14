@@ -99,6 +99,8 @@
                                     <tr>
                                         <th>#</th>
                                         <th>标题</th>
+                                        <th>分类</th>
+                                        <th>标签</th>
                                         <th>发布时间</th>
                                         <th>操作</th>
                                     </tr>
@@ -110,6 +112,15 @@
                                         <tr>
                                             <th scope="row">{{ forloop.counter }}</th>
                                             <td>{{ item.title }}</td>
+                                            <td>{{ item.category.title }}</td>
+                                            <td>
+                                                {% for tag in item.tags.all %}
+                                                        {{ tag.title }},
+                                                    </span>
+                                                    {% empty %}
+                                                {% endfor %}
+
+                                            </td>
                                             <td>{{ item.create_time|date:"Y-m-d H:i" }}</td>
                                             <td>
                                                 <a href="" data-toggle="modal" data-target="#editModal"

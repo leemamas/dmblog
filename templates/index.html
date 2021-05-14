@@ -114,13 +114,17 @@
                             <header class="entry-header">
 
                                 <h1 class="entry-title">
-                                    <a class="label">{{ item.category.title }}<i class="label-arrow"></i></a>
+                                    {% if item.category %}
+                                         <a class="label">{{ item.category.title }}<i class="label-arrow"></i></a>
+                                    {% endif %}
+
                                     <a href="/article/{{ item.pk }}/">{{ item.title }}</a>
                                 </h1>
                                 <div class="entry-meta">
                                     <span class="titletag">
                                         {% for tag in item.tags.all %}
                                             <a href="">{{ tag.title }},</a>
+                                            {% empty %}
                                         {% endfor %}
                                     </span>
 
