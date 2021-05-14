@@ -19,6 +19,10 @@ from django.urls import path,re_path
 from django.views.static import serve
 from blog import settings
 from app import views
+from django.conf.urls import handler404, handler500
+
+handler404=views.page_not_found
+handler500=views.page_error
 
 urlpatterns = [
     path('admin/', admin.site.urls),

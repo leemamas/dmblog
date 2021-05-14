@@ -370,3 +370,9 @@ def categoryinfo(request,id):
     except:
         article_list = paginator.get_page(1)
     return render(request,'categoryinfo.html',locals())
+
+def page_not_found(request, exception):
+    return render(request,'404.html',locals())
+
+def page_error(request):
+    return render(request,'500.html',locals())
