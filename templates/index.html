@@ -115,18 +115,20 @@
 
                                 <h1 class="entry-title">
                                     {% if item.category %}
-                                         <a class="label">{{ item.category.title }}<i class="label-arrow"></i></a>
+                                         <a class="label" href="/category/{{ item.category.pk }}/">{{ item.category.title }}<i class="label-arrow"></i></a>
                                     {% endif %}
 
                                     <a href="/article/{{ item.pk }}/">{{ item.title }}</a>
                                 </h1>
                                 <div class="entry-meta">
-                                    <span class="titletag">
-                                        {% for tag in item.tags.all %}
-                                            <a href="">{{ tag.title }},</a>
-                                            {% empty %}
-                                        {% endfor %}
-                                    </span>
+
+                                    {% for tag in item.tags.all %}
+                                        <span class="titletag">
+                                            <a href="/tag/{{ tag.pk }}/">{{ tag.title }},</a>
+                                         </span>
+                                        {% empty %}
+                                    {% endfor %}
+
 
                                     <span class="titletime">
                                            <a>{{ item.create_time|date:"Y-m-d H:i" }} </a>

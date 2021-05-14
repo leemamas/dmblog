@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% block css %}
+    <style>
+
+    </style>
+{% endblock %}
 {% block content %}
     <div class="content-body">
         <div class="container">
@@ -7,25 +12,208 @@
                     <h1 class="page-title">Contact</h1>
                     <article class="post">
                         <div class="entry-content clearfix">
-                            <form action="#" method="post" class="contact-form">
+                            <form method="post" class="contact-form" id="Form">
+                                {% csrf_token %}
                                 <div class="row">
                                     <div class="col-md-6 col-md-offset-3">
                                         <input type="text" name="name" placeholder="Name" required>
-                                        <input type="email" name="email" placeholder="Email" required>
-                                        <input type="text" name="subject" placeholder="Subject" required>
                                         <textarea name="message" rows="7" placeholder="Your Message"
                                                   required></textarea>
-                                        <button class="btn-send btn-5 btn-5b ion-ios-paperplane">
-                                            <span>Drop Me a Line</span></button>
+                                        <button type="button" class="btn-send btn-5 btn-5b  msg">
+                                            <span>Leave me a message</span></button>
                                     </div>
                                 </div>    <!-- row -->
                             </form>
                         </div>
                     </article>
+
+                    <div class="height-40px"></div>
+
+                    <div class="col-md-10">
+                        <ol class="breadcrumb">
+                            <li><a>留言列表</a></li>
+                            <li><a class="tree_btn" style="cursor: pointer;">留言树</a></li>
+                        </ol>
+                    </div>
+
+                    <div class="col-md-10">
+
+                        <div class="comment_tree list-group"></div>
+                    </div>
+
+
+                    <div class="col-md-10">
+
+
+                        <ul class="list-group comment_list">
+                            {% for item in list %}
+                                <li class="list-group-item">
+                                    <div>
+                                        <a href="">#{{ forloop.counter }}楼【{{ item.name }}】</a>
+                                        <span>{{ item.create_time|date:"Y-m-d H:i" }}</span>
+
+                                        <a class="pull-right reply_btn" reply_id="{{ item.pk }}" href=""
+                                           data-toggle="modal" data-target="#myModal">回复</a>
+
+
+                                    </div>
+                                    {% if item.parent_comment_id %}
+                                        <div class="pid_info well">
+                                            <p>【{{ item.parent_comment.name }}】:{{ item.parent_comment.content }}</p>
+                                        </div>
+                                    {% endif %}
+                                    <div style="margin-top: 10px">
+                                        <p>{{ item.content }}</p>
+                                    </div>
+                                </li>
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+
+
                 </main>
             </div>
+
+
+            <!-- 回复Modal-->
+            <div id="myModal" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalLabel" aria-hidden="true"
+                 class="modal fade text-md-left">
+                <div role="document" class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 id="exampleModalLabel" class="modal-title">回复留言</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <form class="form-horizontal" id="reForm">
+                                {% csrf_token %}
+                                <div class="form-group row">
+                                    <label class="col-md-1 form-control-label">昵称</label>
+                                    <div class="col-md-11">
+                                        <input type="text" name="name" class="form-control"
+                                               required>
+                                        <input type="hidden" name="replyid">
+                                    </div>
+                                </div>
+                                <div class="line"></div>
+                                <div class="form-group row">
+                                    <label class="col-md-1 form-control-label">内容</label>
+                                    <div class="col-md-11">
+                                                            <textarea class="form-control" rows="10"
+                                                                      style="resize: none" name="message"
+                                                                      required></textarea>
+                                    </div>
+                                </div>
+                            </form>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" data-dismiss="modal"
+                                    class="btn btn-secondary">Close
+                            </button>
+                            <button type="button" class="btn btn-primary reply">Reply
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     </div>
+    <script src="/static/plugin/js/jquery-2.1.3.min.js"></script>
+    <script>
+        $('.msg').click(function () {
+
+            var formdata = new FormData()
+            var request_data = $("#Form").serializeArray();
+            $.each(request_data, function (index, data) {
+                formdata.append(data.name, data.value)
+            })
+
+            $.ajax({
+                url: '/msg/',
+                type: 'post',
+                contentType: false,
+                processData: false,
+                data: formdata,
+                success: function (data) {
+                    if (data.status == 0) {
+                        location.href = '/contact/'
+                    } else {
+                        console.log(data)
+                    }
+
+                }
+            })
+        })
+
+        //回复
+
+        $(".reply_btn").click(function () {
+            var pid=$(this).attr("reply_id")
+            $("#reForm").find("input[name='replyid']").val(pid)
+        })
+
+        $(".reply").click(function () {
+            var formdata = new FormData()
+            var request_data = $("#reForm").serializeArray();
+            $.each(request_data, function (index, data) {
+                formdata.append(data.name, data.value)
+            })
+
+            $.ajax({
+                url: '/remsg/',
+                type: 'post',
+                contentType: false,
+                processData: false,
+                data: formdata,
+                success: function (data) {
+                    if (data.status == 0) {
+                        location.href = '/contact/'
+                    } else {
+                        console.log(data)
+                    }
+
+                }
+            })
+        })
+
+            //评论树
+            $(".tree_btn").click(function () {
+                var bol=$(".comment_tree").html()
+                if(!bol){
+                    $.ajax({
+                    url:"/remsgTree/",
+                    type:"get",
+                    success:function (data) {
+                        console.log(data)
+                        $.each(data,function (index,comment_obj) {
+                            var pk=comment_obj.pk
+                            var name=comment_obj.name
+                            var content=comment_obj.content
+                            var parent_comment_id=comment_obj.parent_comment_id
+
+                            var str=`<div class="tree_item" pid=`+pk+` style="margin-left:10px"><span>`+'【'+name+'】:'+content+`</span></div>`
+
+                            if(!parent_comment_id){
+
+                                $(".comment_tree").append(str)
+                            }else {
+                                $("[pid="+parent_comment_id+"]").append(str)
+                            }
+                        })
+                    }
+                })
+                }else{
+                    $(".comment_tree").html("")
+                }
+
+            })
+    </script>
 {% endblock %}
 
 

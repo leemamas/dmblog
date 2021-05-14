@@ -46,3 +46,13 @@ class Article2Tag(models.Model):
 
     class Meta:
         unique_together=[('article','tag'),]
+
+class Contact(models.Model):
+
+    nid = models.AutoField(primary_key=True)
+    name=models.CharField(verbose_name='留意者',max_length=32)
+    content=models.CharField(verbose_name='留言内容',max_length=255)
+    create_time=models.DateTimeField(verbose_name='留言时间',auto_now_add=True)
+    parent_comment=models.ForeignKey('self',null=True,on_delete=models.CASCADE)
+
+

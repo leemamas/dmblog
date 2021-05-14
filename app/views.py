@@ -331,6 +331,7 @@ def about(request):
     return render(request,'about.html',locals())
 
 def contact(request):
+    list=models.Contact.objects.all()
     return render(request,'contact.html',locals())
 
 def articleinfo(request,id):
@@ -376,3 +377,39 @@ def page_not_found(request, exception):
 
 def page_error(request):
     return render(request,'500.html',locals())
+
+
+def msg(request):
+    ret = {}
+    name=request.POST.get('name')
+    content=request.POST.get('message')
+    soup = BeautifulSoup(content, 'html.parser')
+    # 过虑
+    for tag in soup.find_all():
+        if tag.name == 'script':
+            tag.decompose()
+    models.Contact.objects.create(name=name,content=str(soup))
+
+    ret['status']=0
+    return JsonResponse(ret)
+
+def remsg(request):
+    ret = {}
+    name=request.POST.get('name')
+    content=request.POST.get('message')
+    id=request.POST.get('replyid')
+    soup = BeautifulSoup(content, 'html.parser')
+    # 过虑
+    for tag in soup.find_all():
+        if tag.name == 'script':
+            tag.decompose()
+    models.Contact.objects.create(name=name,content=str(soup),parent_comment_id=id)
+
+    ret['status']=0
+    return JsonResponse(ret)
+
+def remsgTree(request):
+
+    comment_list=list(models.Contact.objects.order_by("pk").values("pk","name","content","parent_comment_id"))
+
+    return JsonResponse(comment_list,safe=False)

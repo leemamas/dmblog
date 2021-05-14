@@ -21,8 +21,8 @@ from blog import settings
 from app import views
 from django.conf.urls import handler404, handler500
 
-handler404=views.page_not_found
-handler500=views.page_error
+# handler404=views.page_not_found
+# handler500=views.page_error
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -48,6 +48,10 @@ urlpatterns = [
     path('category/',views.category),
     path('category/<id>/',views.categoryinfo),
 
+    path('msg/',views.msg),
+    path('remsg/',views.remsg),
+    path('remsgTree/',views.remsgTree),
+
 
 
     path('manage/article/',views.list_article),
@@ -67,6 +71,7 @@ urlpatterns = [
     path('manage/del_category/<id>/',views.del_category),
 
     re_path(r"media/(?P<path>.*)$",serve,{"document_root":settings.MEDIA_ROOT}),
+    re_path(r'^static/(?P<path>.*)$' , serve, { 'document_root' : settings.STATICFILES_DIRS}),
     path('upload/',views.upload ),
 
 ]
