@@ -10,76 +10,50 @@
                         <div class="card">
                             <!-- 标题 -->
                             <div class="card-header">
-                                <h3 class="h6 text-uppercase mb-0">个人资料</h3>
+                                <h3 class="h6 text-uppercase mb-0">更改密码</h3>
                             </div>
                             <!-- 表单数据 -->
                             <div class="card-body">
                                 <form class="form-horizontal" id="form" enctype="multipart/form-data">
                                     {% csrf_token %}
-                                    <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">用户名</label>
-                                        <div class="col-md-9">
-                                            <input type="text" disabled class="form-control"
-                                                   value="{{ user.username }}">
-                                            <input type="hidden" name="username" value="{{ user.username }}">
-                                        </div>
-                                    </div>
-                                     <div class="line"></div>
+
 
                                     <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">昵称</label>
+                                        <label class="col-md-3 form-control-label">旧密码</label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" name='nickname'
-                                                   value="{{ user.nickname }}">
+                                            <input type="password" class="form-control" name='pwd'
+                                                   value="">
                                             <small class="form-text text-danger ml-3 error"></small>
                                         </div>
                                     </div>
                                      <div class="line"></div>
 
                                     <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">职位</label>
+                                        <label class="col-md-3 form-control-label">新密码</label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" name='position'
-                                                   value="{{ user.position }}">
+                                            <input type="password" class="form-control" name='newpwd'
+                                                   value="">
                                             <small class="form-text text-danger ml-3 error"></small>
                                         </div>
                                     </div>
 
                                     <div class="line"></div>
                                     <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">电话</label>
+                                        <label class="col-md-3 form-control-label">确认新密码</label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" name='telphone'
-                                                   value="{{ user.telphone }}">
-                                            <small class="form-text text-danger ml-3 error"></small>
-                                        </div>
-                                    </div>
-
-                                    <div class="line"></div>
-                                    <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">邮箱</label>
-                                        <div class="col-md-9">
-                                            <input type="email" class="form-control" name='email'
-                                                   value="{{ user.email }}">
+                                            <input type="password" class="form-control" name='renewpwd'
+                                                   value="">
                                             <small class="form-text text-danger ml-3 error"></small>
                                         </div>
                                     </div>
 
 
-                                    <div class="line"></div>
-                                    <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">头像</label>
-                                        <div class="col-md-9">
-                                            <img id="avatar_img" src="/media/{{ user.avatar }}" width="80" height="80">
-                                            <input type="file" id="avatar" name='avatar'>
-                                        </div>
-                                    </div>
                                     <div class="line"></div>
                                     <div class="form-group row">
                                         <div class="col-md-9 ml-auto">
                                             <button type="button" class="btn btn-danger leave">离开</button>
                                             <button type="button" data-toggle="modal" data-target="#myModal"
-                                                    class="btn btn-success">更新
+                                                    class="btn btn-success">更改
                                             </button>
                                             <!-- Modal-->
                                             <div id="myModal" tabindex="-1" role="dialog"
@@ -88,13 +62,13 @@
                                                 <div role="document" class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h4 id="exampleModalLabel" class="modal-title">确认更新</h4>
+                                                            <h4 id="exampleModalLabel" class="modal-title">确认更改</h4>
                                                             <button type="button" data-dismiss="modal"
                                                                     aria-label="Close" class="close"><span
                                                                     aria-hidden="true">×</span></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <p>你真的要修改个人信息？</p>
+                                                            <p>你真的要修改密码？</p>
 
                                                         </div>
                                                         <div class="modal-footer">
@@ -131,19 +105,7 @@
     <script src="/static/plugin/js/jquery-2.1.3.min.js"></script>
     <script>
 
-        //预览头像
-        $("#avatar").change(function () {
-            //选中的文件对象
-            var file_obj = $(this)[0].files[0];
-            //文件对象的路径
-            var reader = new FileReader()
-            reader.readAsDataURL(file_obj)
-            //修改img的src
-            reader.onload = function () {
-                $("#avatar_img").attr('src', reader.result)
-            }
 
-        })
         $('.leave').click(function () {
             location.href = '/manage/'
         })
@@ -154,31 +116,23 @@
                 formdata.append(data.name, data.value)
             })
 
-            var avatar = $("#avatar")[0].files[0]
-            formdata.append("avatar", avatar);
 
             $.ajax({
-                url: '/user/',
+                url: '/manage/chpwd/',
                 type: 'post',
                 contentType: false,
                 processData: false,
                 data: formdata,
-                {#data:{#}
-                {#    csrfmiddlewaretoken:$("[name='csrfmiddlewaretoken']").val(),#}
-                {#    username:$("[name='username']").val(),#}
-                {#    telphone:$("[name='telphone']").val(),#}
-                {#    email:$("[name='email']").val(),#}
-                {#    avatar:('#avatar')[0].files[0],#}
-                {# }#}
+
                 success: function (data) {
                     if (data.status == 0) {
 
-                        location.href = '/manage/userinfo/'
                     } else {
+                        console.log(data)
                         $('.error').text('')
                         $('.form-control').removeClass('is-invalid')
                         $.each(data.error, function (field, error_list) {
-                            $("[name=" + field + "]").next().text(error_list[0])
+                            $("[name=" + field + "]").next().text(error_list)
                             $("[name=" + field + "]").addClass('is-invalid')
                             $('#myModal').modal('hide')
                         })

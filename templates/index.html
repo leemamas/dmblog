@@ -84,16 +84,16 @@
                         <!--设置轮播的图片-->
                         <div class="carousel-inner">
                             <div class="item active">
-                                <a href="##"><img src="/static/front/img/sl1.jpg" alt="cat1"></a>
+                                <a href="##"><img src="/media/{{ blog.pic1}}" alt="cat1"></a>
                             </div>
                             <div class="item">
-                                <a href="##"><img src="/static/front/img/sl2.jpg" alt="cat2"></a>
+                                <a href="##"><img src="/media/{{ blog.pic2}}" alt="cat2"></a>
                             </div>
                             <div class="item">
-                                <a href="##"><img src="/static/front/img/sl3.jpg" alt="cat3"></a>
+                                <a href="##"><img src="/media/{{ blog.pic3}}" alt="cat3"></a>
                             </div>
                             <div class="item">
-                                <a href="##"><img src="/static/front/img/sl4.jpg" alt="cat3"></a>
+                                <a href="##"><img src="/media/{{ blog.pic4}}" alt="cat3"></a>
                             </div>
                         </div>
                         <a class="left carousel-control" href="#slidershow" role="button" data-slide="prev">
@@ -149,8 +149,24 @@
                             </div>
 
                         </article>
-
+                        <hr>
                     {% endfor %}
+
+                <!-- 分页 -->
+                    <div class="text-center">
+                        <a href="/?page=1">首页</a>
+                        {% if article_list.has_previous %}
+                            <a href="/?page={{ article_list.previous_page_number }}">上一页</a>
+                        {% endif %}
+                        {% for num in article_list.paginator.page_range %}
+                            <a href="/?page={{ num }}"> 【{{ num }}】</a>
+                        {% endfor %}
+                        {% if posts.has_next %}
+                            <a href="/?page={{ article_list.next_page_number }}">下一页</a>
+                        {% endif %}
+                        <a href="/?page={{ article_list.paginator.num_pages }}">尾页</a>
+
+                    </div>
 
                 </main>
 
@@ -161,15 +177,15 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">关于我</div>
                         <div class="media">
-                            <a class="media-left" style="padding-left: 5px;">
-                                <img src="/media/img/avatars/default.jpg" width="80" height="80" alt=""
+                            <a class="media-left" style="padding-left: 5px;padding-bottom: 5px">
+                                <img src="/media/{{ user.avatar}}" width="80" height="80" alt=""
                                      style="border-radius:45px;">
                             </a>
                             <div class="media-body" style="padding-left: 5px;padding-top: 15px;">
                                 <h3 class="media-heading">
-                                    呆马
+                                    {{ user.nickname }}
                                 </h3>
-                                <p>人类被研究对象</p>
+                                <p>{{ user.position }}</p>
                             </div>
                         </div>
                     </div>
@@ -177,7 +193,12 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">友情连接</div>
                         <div class="panel-body">
-                            <span><a href="http://www.baidu.com">百度</a></span>
+                            <span><a href="http://www.baidu.com">百度</a></span><br>
+                            {% for item in link_list %}
+                                     <span><a href="{{ item.url}}">{{ item.title }}</a></span><br>
+                            {% endfor %}
+
+
                         </div>
 
                     </div>

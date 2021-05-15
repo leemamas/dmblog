@@ -10,68 +10,76 @@
                         <div class="card">
                             <!-- 标题 -->
                             <div class="card-header">
-                                <h3 class="h6 text-uppercase mb-0">个人资料</h3>
+                                <h3 class="h6 text-uppercase mb-0">基本设置</h3>
                             </div>
                             <!-- 表单数据 -->
                             <div class="card-body">
                                 <form class="form-horizontal" id="form" enctype="multipart/form-data">
                                     {% csrf_token %}
-                                    <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">用户名</label>
-                                        <div class="col-md-9">
-                                            <input type="text" disabled class="form-control"
-                                                   value="{{ user.username }}">
-                                            <input type="hidden" name="username" value="{{ user.username }}">
-                                        </div>
-                                    </div>
+
                                      <div class="line"></div>
 
                                     <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">昵称</label>
+                                        <label class="col-md-3 form-control-label">博客标题</label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" name='nickname'
-                                                   value="{{ user.nickname }}">
+                                            <input type="text" class="form-control" name='title'
+                                                   value="{{ blog.title }}" >
                                             <small class="form-text text-danger ml-3 error"></small>
                                         </div>
                                     </div>
                                      <div class="line"></div>
 
                                     <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">职位</label>
+                                        <label class="col-md-3 form-control-label">站点名称</label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" name='position'
-                                                   value="{{ user.position }}">
+                                            <input type="text" class="form-control" name='site_name'
+                                                   value="{{ blog.site_name }}" >
                                             <small class="form-text text-danger ml-3 error"></small>
                                         </div>
                                     </div>
 
                                     <div class="line"></div>
+
                                     <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">电话</label>
+                                        <label class="col-md-3 form-control-label">后台名称</label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" name='telphone'
-                                                   value="{{ user.telphone }}">
+                                            <input type="text" class="form-control" name='bgdoor_name'
+                                                   value="{{ blog.bgdoor_name }}" >
                                             <small class="form-text text-danger ml-3 error"></small>
                                         </div>
                                     </div>
 
                                     <div class="line"></div>
+
                                     <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">邮箱</label>
+                                        <label class="col-md-3 form-control-label">轮播图1</label>
                                         <div class="col-md-9">
-                                            <input type="email" class="form-control" name='email'
-                                                   value="{{ user.email }}">
-                                            <small class="form-text text-danger ml-3 error"></small>
+                                            <img id="lunbo_img1" src="/media/{{ blog.pic1 }}" width="150">
+                                            <input type="file" id="pic1" name='pic1'>
                                         </div>
                                     </div>
-
-
                                     <div class="line"></div>
                                     <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">头像</label>
+                                        <label class="col-md-3 form-control-label">轮播图2</label>
                                         <div class="col-md-9">
-                                            <img id="avatar_img" src="/media/{{ user.avatar }}" width="80" height="80">
-                                            <input type="file" id="avatar" name='avatar'>
+                                            <img id="lunbo_img2" src="/media/{{ blog.pic2 }}" width="150" >
+                                            <input type="file" id="pic2" name='pic2'>
+                                        </div>
+                                    </div>
+                                    <div class="line"></div>
+                                    <div class="form-group row">
+                                        <label class="col-md-3 form-control-label">轮播图3</label>
+                                        <div class="col-md-9">
+                                            <img id="lunbo_img3" src="/media/{{ blog.pic3 }}" width="150">
+                                            <input type="file" id="pic3" name='pic3'>
+                                        </div>
+                                    </div>
+                                    <div class="line"></div>
+                                    <div class="form-group row">
+                                        <label class="col-md-3 form-control-label">轮播图4</label>
+                                        <div class="col-md-9">
+                                            <img id="lunbo_img4" src="/media/{{ blog.pic4 }}" width="150">
+                                            <input type="file" id="pic4" name='pic4'>
                                         </div>
                                     </div>
                                     <div class="line"></div>
@@ -94,7 +102,7 @@
                                                                     aria-hidden="true">×</span></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <p>你真的要修改个人信息？</p>
+                                                            <p>你真的要修改博客设置？</p>
 
                                                         </div>
                                                         <div class="modal-footer">
@@ -132,7 +140,7 @@
     <script>
 
         //预览头像
-        $("#avatar").change(function () {
+        $("#pic1").change(function () {
             //选中的文件对象
             var file_obj = $(this)[0].files[0];
             //文件对象的路径
@@ -140,7 +148,43 @@
             reader.readAsDataURL(file_obj)
             //修改img的src
             reader.onload = function () {
-                $("#avatar_img").attr('src', reader.result)
+                $("#lunbo_img1").attr('src', reader.result)
+            }
+
+        })
+        $("#pic2").change(function () {
+            //选中的文件对象
+            var file_obj = $(this)[0].files[0];
+            //文件对象的路径
+            var reader = new FileReader()
+            reader.readAsDataURL(file_obj)
+            //修改img的src
+            reader.onload = function () {
+                $("#lunbo_img2").attr('src', reader.result)
+            }
+
+        })
+        $("#pic3").change(function () {
+            //选中的文件对象
+            var file_obj = $(this)[0].files[0];
+            //文件对象的路径
+            var reader = new FileReader()
+            reader.readAsDataURL(file_obj)
+            //修改img的src
+            reader.onload = function () {
+                $("#lunbo_img3").attr('src', reader.result)
+            }
+
+        })
+        $("#pic4").change(function () {
+            //选中的文件对象
+            var file_obj = $(this)[0].files[0];
+            //文件对象的路径
+            var reader = new FileReader()
+            reader.readAsDataURL(file_obj)
+            //修改img的src
+            reader.onload = function () {
+                $("#lunbo_img4").attr('src', reader.result)
             }
 
         })
@@ -154,11 +198,17 @@
                 formdata.append(data.name, data.value)
             })
 
-            var avatar = $("#avatar")[0].files[0]
-            formdata.append("avatar", avatar);
+            var pic1 = $("#pic1")[0].files[0]
+            var pic2 = $("#pic2")[0].files[0]
+            var pic3 = $("#pic3")[0].files[0]
+            var pic4 = $("#pic4")[0].files[0]
+            formdata.append("pic1", pic1);
+            formdata.append("pic2", pic2);
+            formdata.append("pic3", pic3);
+            formdata.append("pic4", pic4);
 
             $.ajax({
-                url: '/user/',
+                url: '/manage/blog/',
                 type: 'post',
                 contentType: false,
                 processData: false,
@@ -173,7 +223,7 @@
                 success: function (data) {
                     if (data.status == 0) {
 
-                        location.href = '/manage/userinfo/'
+                        location.href = '/manage/blog/'
                     } else {
                         $('.error').text('')
                         $('.form-control').removeClass('is-invalid')

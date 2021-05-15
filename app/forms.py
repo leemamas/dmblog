@@ -48,6 +48,15 @@ class UserForm(forms.Form):
                                max_length=11,
                                error_messages={'max_length': '手机号超过11个号码'},
                                )
+    nickname = forms.CharField(required=False,
+                               max_length=16,
+                               error_messages={'max_length': '昵称超过16个字符'},
+                               )
+    position = forms.CharField(required=False,
+                               max_length=16,
+                               error_messages={'max_length': '职位超过16个字符'},
+                               )
+
 
     def clean_telphone(self):
         tel=self.cleaned_data.get('telphone')

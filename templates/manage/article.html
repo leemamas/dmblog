@@ -102,6 +102,7 @@
                                         <th>分类</th>
                                         <th>标签</th>
                                         <th>发布时间</th>
+                                        <th>首页推荐</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
@@ -122,6 +123,15 @@
 
                                             </td>
                                             <td>{{ item.create_time|date:"Y-m-d H:i" }}</td>
+                                            <td>
+                                                 <a id="hot" onclick="hot({{ item.pk }})" style="cursor: pointer;">
+                                                {% if item.hot %}
+                                                   ⭐
+                                                {% else %}
+                                                    🌙
+                                                {% endif %}
+                                                 </a>
+                                            </td>
                                             <td>
                                                 <a href="" data-toggle="modal" data-target="#editModal"
                                                    id="edit" onclick="edit({{ item.pk }})">
@@ -329,7 +339,19 @@
 
         })
 
+        function hot(id) {
+             $.ajax({
+                 url: '/manage/change_hot/' + id + '/',
+                 type: 'get',
+                 success:function (data) {
+                     if (data.status == 0) {
+                         location.href = '/manage/article/'
+                     }else{
 
+                     }
+                 }
+             })
+        }
         function edit(id) {
 
             $.ajax({

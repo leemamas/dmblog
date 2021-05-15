@@ -17,7 +17,21 @@ def test(request):
 
 
 def index(request):
-    article_list = models.Article.objects.all()
+    list = models.Article.objects.filter(hot=True).all()
+    link_list=models.Link.objects.all()
+
+    current_page = request.GET.get('page')
+    paginator = Paginator(list, 7)
+
+    try:
+        article_list = paginator.get_page(current_page)
+    except:
+        article_list = paginator.get_page(1)
+
+    blog = models.Blog.objects.first()
+    if not blog:
+        blog = models.Blog.objects.create(title='呆马蓝的天空')
+    user=models.User.objects.first()
 
     return render(request,'index.html',locals())
 
@@ -39,7 +53,6 @@ def login(request):
     return redirect('/manage/')
 
 
-
 def logout(request):
     auth.logout(request)
     return redirect('/login/')
@@ -54,6 +67,72 @@ def manage(request):
 @login_required()
 def userinfo(request):
     return render(request,'manage/userinfo.html',locals())
+
+@login_required()
+def chpwd(request):
+
+    if request.method=='GET':
+        return render(request,'manage/chpwd.html',locals())
+    else:
+        ret = {}
+        pwd=request.POST.get('pwd')
+        newpwd=request.POST.get('newpwd')
+        renewpwd=request.POST.get('renewpwd')
+
+        user = auth.authenticate(username=request.user, password=pwd)
+        if user:
+            if newpwd==renewpwd:
+                user.set_password(newpwd)
+                user.save()
+                ret['status']=0
+            else:
+                ret['error'] = {
+                    'newpwd': '新密码输入2次不一样'
+                }
+        else:
+            ret['status']=1
+            ret['error']={
+                'pwd':'密码错误'
+            }
+
+        return JsonResponse(ret)
+
+#######################################友情链接###################################
+@login_required()
+def link(request):
+    list = models.Link.objects.all()
+    return render(request, 'manage/link.html', locals())
+
+@login_required()
+@csrf_exempt
+def add_link(request):
+    title=request.POST.get('title')
+    url=request.POST.get('url')
+    models.Link.objects.create(title=title,url=url)
+    ret={}
+    ret['status']=0
+    return JsonResponse(ret)
+
+@login_required()
+@csrf_exempt
+def edit_link(request,id):
+    ret={}
+
+    title = request.POST.get('title')
+    url = request.POST.get('url')
+    models.Link.objects.filter(pk=id).update(title=title,url=url)
+    ret['status']=0
+
+    return JsonResponse(ret)
+
+@login_required()
+@csrf_exempt
+def del_link(request,id):
+    ret={}
+    models.Link.objects.filter(pk=id).delete()
+    ret['status']=0
+    return JsonResponse(ret)
+
 
 @login_required()
 def user(request):
@@ -76,7 +155,6 @@ def user(request):
             #models.User.objects.filter(username=username).update(**userForm.cleaned_data,**extra)
             ##更新数据
             models.User.objects.filter(username=username).update(**userForm.cleaned_data)
-
             avatar_obj = request.FILES.get('avatar')
             if avatar_obj:
                 user_obj = models.User.objects.filter(username=username).first()
@@ -99,6 +177,54 @@ def user(request):
 
     return JsonResponse(ret)
 
+@login_required()
+def blog(request):
+    blog = models.Blog.objects.first()
+    if request.method=='GET':
+
+        if not blog:
+            blog = models.Blog.objects.create(title='呆马蓝的天空')
+        return render(request, 'manage/blog.html', locals())
+    else:
+        ret={}
+        title=request.POST.get('title')
+        site_name=request.POST.get('site_name')
+        bgdoor_name=request.POST.get('bgdoor_name')
+
+        blog.title=title
+        blog.site_name=site_name
+        blog.bgdoor_name=bgdoor_name
+
+        pic1= request.FILES.get('pic1')
+        pic2= request.FILES.get('pic2')
+        pic3= request.FILES.get('pic3')
+        pic4= request.FILES.get('pic4')
+        if pic1:
+            blog.pic1=pic1
+        if pic2:
+            blog.pic2 = pic2
+        if pic3:
+            blog.pic3 = pic3
+        if pic4:
+            blog.pic4 = pic4
+        blog.save()
+        ret['status'] = 0
+        return JsonResponse(ret)
+
+@login_required()
+def list_contact(request):
+    list=models.Contact.objects.all()
+    return render(request, 'manage/contact.html', locals())
+
+@login_required()
+@csrf_exempt
+def del_contact(request,id):
+    ret={}
+    models.Contact.objects.filter(pk=id).delete()
+    ret['status']=0
+    return JsonResponse(ret)
+
+
 
 @login_required()
 def list_article(request):
@@ -107,9 +233,23 @@ def list_article(request):
     category_list = models.Category.objects.all()
     article_list=models.Article.objects.all()
 
-
     return render(request,'manage/article.html',locals())
 
+
+@login_required()
+def change_hot(request,id):
+    ret={}
+    article=models.Article.objects.filter(pk=id).first()
+    if article.hot:
+        article.hot=False
+    else:
+        article.hot = True
+    article.save()
+    ret['status']=0
+    return JsonResponse(ret)
+
+
+@login_required()
 def ajaxGetArticle(request,id):
     ret={}
     obj_article=models.Article.objects.filter(pk=id).first()
@@ -314,6 +454,9 @@ def upload(request):
     return JsonResponse(result)
 
 
+def about(request):
+    return render(request,'about.html',locals())
+
 def article(request):
     list = models.Article.objects.all()
 
@@ -326,13 +469,6 @@ def article(request):
         article_list=paginator.get_page(1)
 
     return render(request,'article.html',locals())
-
-def about(request):
-    return render(request,'about.html',locals())
-
-def contact(request):
-    list=models.Contact.objects.all()
-    return render(request,'contact.html',locals())
 
 def articleinfo(request,id):
     article = models.Article.objects.filter(pk=id).first()
@@ -372,12 +508,13 @@ def categoryinfo(request,id):
         article_list = paginator.get_page(1)
     return render(request,'categoryinfo.html',locals())
 
-def page_not_found(request, exception):
-    return render(request,'404.html',locals())
 
-def page_error(request):
-    return render(request,'500.html',locals())
 
+###########################################【留言】#######################################
+
+def contact(request):
+    list=models.Contact.objects.all()
+    return render(request,'contact.html',locals())
 
 def msg(request):
     ret = {}
@@ -413,3 +550,12 @@ def remsgTree(request):
     comment_list=list(models.Contact.objects.order_by("pk").values("pk","name","content","parent_comment_id"))
 
     return JsonResponse(comment_list,safe=False)
+
+
+##################################错误页面处理#######################################
+
+def page_not_found(request, exception):
+    return render(request,'404.html',locals())
+
+def page_error(request):
+    return render(request,'500.html',locals())

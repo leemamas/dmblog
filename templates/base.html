@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>呆马蓝的天空</title>
-
+		<title>
+            {% load my_tags %}
+             {% getSiteName %}
+        </title>
 		<!-- meta -->
 		<meta charset="UTF-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,6 +12,10 @@
 	    <!-- css -->
 		<link rel="stylesheet" href="/static/plugin/css/bootstrap.min.css">
 	    <link rel="stylesheet" href="/static/plugin/css/custom.css">
+
+        <!-- Favicon-->
+        <link rel="shortcut icon" href="/static/front/img/favicon.png">
+
          {% block css %}
 
         {% endblock %}
@@ -28,7 +34,10 @@
                     <!-- 标题 -->
 					<div class="col-md-4 col-sm-5 col-xs-8">
 						<div class="logo">
-							<h1><a href="#"><b>呆马蓝的天空</b></a></h1>
+							<h1><a href="#"><b>
+                                 {% load my_tags %}
+                                    {% getTitle %}
+                            </b></a></h1>
 						</div>
 					</div>
                     <!-- 导航条 -->

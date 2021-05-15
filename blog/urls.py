@@ -32,18 +32,11 @@ urlpatterns = [
     path('about/',views.about),
     path('contact/',views.contact),
 
-    path('login/',views.login),
-    path('logout/',views.logout,name='logout'),
-    path('user/',views.user),
-    path('manage/',views.manage),
-    path('manage/userinfo/',views.userinfo),
-
     path('article/',views.article),
     path('article/<id>/',views.articleinfo),
 
     path('tag/',views.tag),
     path('tag/<id>/',views.taginfo),
-
 
     path('category/',views.category),
     path('category/<id>/',views.categoryinfo),
@@ -52,9 +45,26 @@ urlpatterns = [
     path('remsg/',views.remsg),
     path('remsgTree/',views.remsgTree),
 
+    path('login/', views.login),
+    path('logout/', views.logout, name='logout'),
+    path('user/', views.user),
+    path('manage/', views.manage),
+    path('manage/userinfo/', views.userinfo),
+    path('manage/chpwd/', views.chpwd),
+
+    path('manage/blog/', views.blog),
+
+    path('manage/link/', views.link),
+    path('manage/add_link/', views.add_link),
+    path('manage/edit_link/<id>/', views.edit_link),
+    path('manage/del_link/<id>/', views.del_link),
+
+    path('manage/contact/', views.list_contact),
+    path('manage/del_contact/<id>/', views.del_contact),
 
 
     path('manage/article/',views.list_article),
+    path('manage/change_hot/<id>/',views.change_hot),
     path('manage/ajaxGetArticle/<id>/',views.ajaxGetArticle),
     path('manage/add_article/',views.add_article),
     path('manage/edit_article/<id>/', views.edit_article),

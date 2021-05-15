@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Home</title>
+    <title>{% load my_tags %}
+             {% getBgdoor %}</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
@@ -21,7 +22,7 @@
     <!-- Custom stylesheet - for your changes-->
     <link rel="stylesheet" href="/static/manage/css/custom.css">
     <!-- Favicon-->
-    <link rel="shortcut icon" href="/static/manage/img/favicon.png?3">
+    <link rel="shortcut icon" href="/static/front/img/favicon.png">
     <!-- Tweaks for older IEs--><!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
@@ -92,9 +93,9 @@
                 <div aria-labelledby="userInfo" class="dropdown-menu"><a href="#" class="dropdown-item"><strong
                         class="d-block text-uppercase headings-font-family">Dml</strong><small>(Adminstrator)</small></a>
                     <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">Settings</a>
+                    <a href="/manage/chpwd/" class="dropdown-item">更改密码</a>
                     <div class="dropdown-divider"></div>
-                    <a href="/logout/" class="dropdown-item">Logout</a>
+                    <a href="/logout/" class="dropdown-item">登出</a>
                 </div>
             </li>
         </ul>
@@ -109,6 +110,8 @@
         <ul class="sidebar-menu list-unstyled">
             <li class="sidebar-list-item"><a href="/manage/" class="sidebar-link text-muted"><i
                     class="o-home-1 mr-3 text-gray"></i><span>Home</span></a></li>
+            <li class="sidebar-list-item"><a href="/manage/blog/" class="sidebar-link text-muted"><i
+                    class="o-sales-up-1 mr-3 text-gray"></i><span>博客管理</span></a></li>
             <li class="sidebar-list-item"><a href="/manage/userinfo/" class="sidebar-link text-muted"><i
                     class="o-sales-up-1 mr-3 text-gray"></i><span>个人信息</span></a></li>
 
@@ -127,6 +130,11 @@
                     </ul>
                 </div>
             </li>
+
+            <li class="sidebar-list-item"><a href="/manage/contact/" class="sidebar-link text-muted"><i
+                    class="o-sales-up-1 mr-3 text-gray"></i><span>留言管理</span></a></li>
+            <li class="sidebar-list-item"><a href="/manage/link/" class="sidebar-link text-muted"><i
+                    class="o-sales-up-1 mr-3 text-gray"></i><span>友情链接</span></a></li>
 
         </ul>
 
