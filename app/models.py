@@ -9,7 +9,7 @@ class User(AbstractUser):
 
     nickname=models.CharField(max_length=16,null=None,unique=True,default='呆马')
     position=models.CharField(max_length=16,null=None,unique=True,default='人类被研究对象')
-    telphone=models.CharField(max_length=11,null=None,unique=True)
+    telphone=models.CharField(max_length=11,null=None,unique=True,default='13800138000')
     avatar=models.FileField(upload_to='img/avatars/',default='img/avatars/default.png')
     created_time = models.DateTimeField('创建时间', auto_now_add=True)
 
