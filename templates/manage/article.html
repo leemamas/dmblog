@@ -126,9 +126,9 @@
                                             <td>
                                                  <a id="hot" onclick="hot({{ item.pk }})" style="cursor: pointer;">
                                                 {% if item.hot %}
-                                                   ⭐
+                                                   <img src="/static/manage/img/hot.png" width="18px" title="推荐">
                                                 {% else %}
-                                                    🌙
+                                                    <img src="/static/manage/img/cold.png" width="18px" title="不推荐">
                                                 {% endif %}
                                                  </a>
                                             </td>
